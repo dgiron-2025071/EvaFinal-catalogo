@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -38,6 +39,17 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/libros").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/libros/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/libros/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/prestamos")
+                                .hasAnyRole("BIBLIOTECARIO", "ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/prestamos/**")
+                                .hasAnyRole("BIBLIOTECARIO", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/prestamos/atrasados")
+                                .hasAnyRole("BIBLIOTECARIO", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/prestamos/mis-prestamos")
+                                .authenticated()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(this::respuestaNoAutenticado)
