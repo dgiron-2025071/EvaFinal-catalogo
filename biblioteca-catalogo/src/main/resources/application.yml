@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: biblioteca-catalogo
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/biblioteca_db
+    username: postgres
+    password: admin
+
+  jpa:
+    hibernate:
+      # El esquema lo define schema.sql; JPA solo mapea
+      ddl-auto: none
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # Ejecuta schema.sql y data.sql en cada arranque (scripts idempotentes)
+  sql:
+    init:
+      mode: always
+
+server:
+  port: 8080
+
+app:
+  jwt:
+    # Secreto HMAC-SHA256 en Base64 (solo desarrollo; en produccion se inyecta via variable JWT_SECRET)
+    secret: ${JWT_SECRET:s5IAg4O8CdLn+g/6av97RarPAdXPxo1Ic4AqN9lsHEEh8xFZSdjKUg7CUO1a97gU}
+    expiration-ms: 86400000
