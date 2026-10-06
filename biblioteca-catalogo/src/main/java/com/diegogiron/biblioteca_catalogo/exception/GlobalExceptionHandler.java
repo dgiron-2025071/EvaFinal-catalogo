@@ -46,6 +46,16 @@ public class GlobalExceptionHandler {
         return responder(HttpStatus.CONFLICT, ex.getMessage(), req);
     }
 
+    @ExceptionHandler(ReglaNegocioException.class)
+    public ResponseEntity<ErrorResponseDTO> manejarReglaNegocio(ReglaNegocioException ex, HttpServletRequest req) {
+        return responder(HttpStatus.BAD_REQUEST, ex.getMessage(), req);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> manejarRecursoInexistente(ResourceNotFoundException ex, HttpServletRequest req) {
+        return responder(HttpStatus.NOT_FOUND, ex.getMessage(), req);
+    }
+
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponseDTO> manejarRutaInexistente(NoResourceFoundException ex, HttpServletRequest req) {
         return responder(HttpStatus.NOT_FOUND, "Recurso no encontrado: " + req.getRequestURI(), req);
